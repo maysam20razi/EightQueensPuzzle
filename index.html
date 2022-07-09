@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Maysam Razi - Eight Queens Puzzle</title>
+    <meta charset="utf-8"/>
+    <script>
+        let
+            POS_Col = ["hpt_0", "hpt_75", "hpt_150", "hpt_225", "hpt_300", "hpt_375", "hpt_450", "hpt_525"],
+            POS_Row = ["hpl_0", "hpl_75", "hpl_150", "hpl_225", "hpl_300", "hpl_375", "hpl_450", "hpl_525"],
+            N = 8,
+            doesInitial = false,
+            showCommandP = false;
+
+        fullHomeIndex = [
+            [false, false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false, false],
+            [false, false, false, false, false, false, false, false]
+        ];
+
+        function setupBoard() {
+
+        }
+
+        function fillAllPoint(showNumbersHome = false) {
+            let htmlPoint = "", posL = "", posH = "", homeNumber = "";
+            for (let i = 0; i < 8; i++) {
+                let posCol = POS_Col[7 - i];
+                for (let j = 0; j < 8; j++) {
+                    let posRow = POS_Row[j];
+                    homeNumber = (showNumbersHome) ? ((i * 8) + (j) + 1) : "";
+                    htmlPoint = htmlPoint + '<a class="fullHome ' + posRow + ' ' + posCol + '">' + homeNumber + '</a>';
+                }
+            }
+            document.getElementById('point').innerHTML = htmlPoint;
+        }
+
+        function checkClashQueens() {
+            let valueState = 0;
+            document.getElementById('showValuePosition').innerText = valueState.toString();
+        }
+
+        function fillSquare(indexRow, IndexCol, doesFillSquresWithRedPoint = false) {
+            fullHomeIndex[indexRow][IndexCol] = true;
+
+            let posCol = POS_Col[7 - indexRow];
+            let posRow = POS_Row[IndexCol];
+            let htmlImg = document.getElementById('image-queen').innerHTML + '<img src="img/Whith_chess_queen_clip_art_20443.png" class="imgQueen ' + posCol + ' ' + posRow + '">';
+
+            document.getElementById('image-queen').innerHTML = htmlImg;
+            if (doesFillSquresWithRedPoint) {
+
+                let htmlPoint = "", posR = "", posC = "";
+                // fill columns
+                for (i = 0; i < 8; i++) {
+                    if (i === indexRow) {
+                        continue;
+                    }
+                    posC = POS_Col[7 - i];
+                    posR = POS_Row[IndexCol];
+                    fullHomeIndex[i][IndexCol] = true;
+                    htmlPoint = htmlPoint + '<a class="fullHome ' + posR + ' ' + posC + '"></a>';
+                }
+
+                // fill rows
+                for (i = 0; i < 8; i++) {
+                    if (i === IndexCol) {
+                        continue;
+                    }
+                    posC = POS_Col[7 - indexRow];
+                    posR = POS_Row[i];
+                    htmlPoint = htmlPoint + '<a class="fullHome ' + posR + ' ' + posC + '"></a>';
+                }
+                // fill digonal
+
+                document.getElementById('point').innerHTML = htmlPoint;
+                console.log(fullHomeIndex[indexRow][IndexCol]);
+            }
+        }
+
+        function solvePuzzle(typeFunction = "LocalBeamSearch") {
+            console.log("Start");
+        }
+
+        function clearState() {
+            document.location.reload();
+        }
+
+
+        function randomInitialState() {
+            if (!doesInitial) {
+                doesInitial = true;
+                console.log("initialState");
+                for (let i = 0; i < 8; i++)
+                    fillSquare(Math.floor(Math.random() * 8), i);
+            }
+        }
+        function commandLine(newLine) {
+            let textOld = document.getElementById('lineCommand').innerHTML;
+            document.getElementById('lineCommand').innerHTML = textOld + "<a>"+newLine+"</a><br>";
+        }
+        function showCommandPanel() {
+            if (showCommandP) {
+                document.getElementsByClassName('info-line')[0].style.visibility = 'hidden';
+                document.getElementById('b-show').innerText = "Show Command Line";
+                showCommandP = false;
+            } else {
+                document.getElementsByClassName('info-line')[0].style.visibility = 'visible';
+                document.getElementById('b-show').innerText = "Hide Command Line";
+                showCommandP = true;
+            }
+        }
+    </script>
+    <style>
+        @font-face {
+            font-family: "SphereFez";
+            src: url("fonts/SphereFez-Yz5g4.otf");
+        }
+
+        @font-face {
+            font-family: "Moonglade";
+            src: url("fonts/MoongladeDemoBold-jOzM.ttf");
+        }
+
+        @font-face {
+            font-family: "FUTURAL";
+            src: url("fonts/FUTURAL.ttf");
+        }
+
+        body {
+            background-color: #dddddd;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            font-family: 'SphereFez';
+            position: fixed;
+            height: 70px;
+            width: 100%;
+            text-align: center;
+            margin: 0;
+            top: 0;
+            background-color: rgba(168, 74, 92, 1);
+            color: rgba(245, 213, 188, 1);
+        }
+
+        .boardPanel {
+            top: 82px;
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background-color: rgba(39, 66, 87, 1);
+            left: 12px;
+        }
+
+        .boardPanelW {
+            position: absolute;
+            width: 75px;
+            height: 75px;
+            background-color: rgba(223, 193, 131, 1);
+        }
+
+        .button-style-rp {
+            width: 220px;
+            height: 40px;
+            background-color: rgba(223, 193, 131, 1);
+            border: none;
+            font-family: 'Moonglade';
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+
+        }
+
+        .button-style-rp:hover {
+            background-color: rgba(168, 74, 92, 1);
+            color: white;
+        }
+
+        .rightPanel {
+            background-color: #274257;
+            position: absolute;
+            width: 250px;
+            height: 560px;
+            top: 80px;
+            right: 10px;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+        }
+
+        .imgQueen {
+            position: absolute;
+            width: 75px;
+            box-sizing: border-box;
+            padding: 11px;
+        }
+
+        .fullHome {
+            margin-left: 27.5px;
+            margin-top: 27.5px;
+            background-color: #ed0d38;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 80%;
+            z-index: 3;
+            border-radius: 10px;
+        }
+
+        #showValuePosition {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 35px;
+            text-align: center;
+            box-sizing: border-box;
+            padding-top: 10px;
+            font-family: 'SphereFez';
+            top: 83px;
+            left: 623px;
+            background: cadetblue;
+            color: darkblue;
+        }
+
+        .info-line {
+            visibility: hidden;
+            position: fixed;
+            width: 80%;
+            height: 100px;
+            box-sizing: border-box;
+            border-radius: 8px;
+            background-color: #aaaaaa;
+            bottom: 10px;
+            left: 10px;
+            padding-top: 10px;
+            padding-left: 10px;
+            font-family: 'FUTURAL';
+        }
+
+        /* vertical **********************/
+
+        .hpt_0 {
+            top: 0;
+        }
+
+        .hpt_75 {
+            top: 75px;
+        }
+
+        .hpt_150 {
+            top: 150px;
+        }
+
+        .hpt_225 {
+            top: 225px;
+        }
+
+        .hpt_300 {
+            top: 300px;
+        }
+
+        .hpt_375 {
+            top: 375px;
+        }
+
+        .hpt_450 {
+            top: 450px;
+        }
+
+        .hpt_525 {
+            top: 525px;
+        }
+
+        /* horizon **********************/
+
+        .hpl_0 {
+            left: 0;
+
+        }
+
+        .hpl_75 {
+            left: 75px;
+
+        }
+
+        .hpl_150 {
+            left: 150px;
+
+        }
+
+        .hpl_225 {
+            left: 225px;
+
+        }
+
+        .hpl_375 {
+            left: 375px;
+        }
+
+        .hpl_525 {
+            left: 525px;
+
+        }
+
+        .hpl_300 {
+            left: 300px;
+
+        }
+
+        .hpl_450 {
+            left: 450px;
+        }
+    </style>
+</head>
+<body onload="setupBoard();">
+<div class="header">
+    <h2>Maysam Razi : 8 queens puzzle - artificial intelligence</h2>
+</div>
+<div id="showValuePosition">0</div>
+<div class="boardPanel">
+    <div id="board">
+        <div class="boardPanelW hpt_0 hpl_0"></div>
+        <div class="boardPanelW hpt_0 hpl_150"></div>
+        <div class="boardPanelW hpt_0 hpl_300"></div>
+        <div class="boardPanelW hpt_0 hpl_450"></div>
+
+        <div class="boardPanelW hpt_75 hpl_75"></div>
+        <div class="boardPanelW hpt_75 hpl_225"></div>
+        <div class="boardPanelW hpt_75 hpl_375"></div>
+        <div class="boardPanelW hpt_75 hpl_525"></div>
+
+        <div class="boardPanelW hpt_150 hpl_0"></div>
+        <div class="boardPanelW hpt_150 hpl_150"></div>
+        <div class="boardPanelW hpt_150 hpl_300"></div>
+        <div class="boardPanelW hpt_150 hpl_450"></div>
+
+        <div class="boardPanelW hpt_225 hpl_75"></div>
+        <div class="boardPanelW hpt_225 hpl_225"></div>
+        <div class="boardPanelW hpt_225 hpl_375"></div>
+        <div class="boardPanelW hpt_225 hpl_525"></div>
+
+        <div class="boardPanelW hpt_300 hpl_0"></div>
+        <div class="boardPanelW hpt_300 hpl_150"></div>
+        <div class="boardPanelW hpt_300 hpl_300"></div>
+        <div class="boardPanelW hpt_300 hpl_450"></div>
+
+        <div class="boardPanelW hpt_375 hpl_75"></div>
+        <div class="boardPanelW hpt_375 hpl_225"></div>
+        <div class="boardPanelW hpt_375 hpl_375"></div>
+        <div class="boardPanelW hpt_375 hpl_525"></div>
+
+        <div class="boardPanelW hpt_450 hpl_0"></div>
+        <div class="boardPanelW hpt_450 hpl_150"></div>
+        <div class="boardPanelW hpt_450 hpl_300"></div>
+        <div class="boardPanelW hpt_450 hpl_450"></div>
+
+        <div class="boardPanelW hpt_525 hpl_75"></div>
+        <div class="boardPanelW hpt_525 hpl_225"></div>
+        <div class="boardPanelW hpt_525 hpl_375"></div>
+        <div class="boardPanelW hpt_525 hpl_525"></div>
+    </div>
+
+    <div id="image-queen">
+    </div>
+    <div id="point">
+    </div>
+</div>
+
+<div class="rightPanel">
+    <select id="algorithm" class="button-style-rp">
+        <option>local beam search</option>
+        <option>DFS</option>
+        <option>A* search</option>
+        <option>local beam search with row check</option>
+        <option>local beam search with state check</option>
+    </select>
+    <button class="button-style-rp" onclick="randomInitialState()">Random State</button>
+    <button class="button-style-rp" onclick="solvePuzzle()">Solve</button>
+    <button id="b-show" class="button-style-rp" onclick="showCommandPanel()">Show Command Line</button>
+    <button class="button-style-rp" onclick="clearState()">Reset</button>
+</div>
+<div id="lineCommand" class="info-line"></div>
+</body>
+
+</html>
