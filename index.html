@@ -11,13 +11,11 @@
             POS_Row = ["hpl_0", "hpl_75", "hpl_150", "hpl_225", "hpl_300", "hpl_375", "hpl_450", "hpl_525"],
             N = 8,
             queenActiveInBoard = 0,
-            doesInitial = false,
             showCommandP = false,
-            rowChangeUpIndex = 7,
+            showPositionP = true;
             q_location = {rowQ: -1, columnQ: -1},
             queens_8 = [q_location, q_location, q_location, q_location, q_location, q_location, q_location, q_location],
             rowQueensIndex = [ -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1],
-            rowQueensIndexOld = [-1 , -1 , -1 , -1 , -1 , -1 , -1 , -1],
             epoch = 0,
             fullHomeIndex = [
                 [false, false, false, false, false, false, false, false],
@@ -41,29 +39,8 @@
                 }
             document.getElementById('board').innerHTML = innerHtmlBoard;
         }
-
-        function fillAllPoint(showNumbersHome = false) {
-            let htmlPoint = "", posL = "", posH = "", homeNumber = "";
-            for (let i = 0; i < 8; i++) {
-                let posCol = POS_Col[7 - i];
-                for (let j = 0; j < 8; j++) {
-                    let posRow = POS_Row[j];
-                    homeNumber = (showNumbersHome) ? ((i * 8) + (j) + 1) : "";
-                    htmlPoint = htmlPoint + '<a class="fullHome ' + posRow + ' ' + posCol + '">' + homeNumber + '</a>';
-                }
-            }
-            document.getElementById('point').innerHTML = htmlPoint;
-        }
-
         function reloadPosition() {
             document.location.reload();
-        }
-
-        function randomInitialState() {
-            for (var i = 0; i < 8; i++)
-                release(i);
-            for (var i = 0; i < 8; i++)
-                fillSquare(Math.floor(Math.random() * 8), i, i);
         }
 
         // ************** Solve function ****************
@@ -115,7 +92,6 @@
             for (let j = 0; j < 8; j++)
                 if (j > upperIndex + 1)
                     rowQueensIndex[j] = -1;
-
             }
 
         function solveRows() {
@@ -247,6 +223,19 @@
         function graphSearchTrace(newLine) {
             let textOld = document.getElementById('gs-debug').innerHTML;
             document.getElementById('gs-debug').innerHTML = textOld + "<a>-> " + newLine + "</a><br>";
+        }
+        function showPosition() {
+          if (showPositionP) {
+              commandLine('Hide position');
+              document.getElementsByClassName('graphSearch')[0].style.visibility = 'hidden';
+              document.getElementById('b-position').innerText = "Show position queens search";
+              showPositionP = false;
+          } else {
+              commandLine('Show position');
+              document.getElementsByClassName('graphSearch')[0].style.visibility = 'visible';
+              document.getElementById('b-position').innerText = "Hide position queens search";
+              showPositionP = true;
+          }
         }
     </script>
 
@@ -413,6 +402,7 @@
             font-family: 'Consolas';
             overflow: auto;
             color: #eaffd6;
+            visibility : visible;
         }
 
         .checkBox-text {
@@ -510,11 +500,10 @@
     <select id="algorithm" class="button-style-rp">
         <option>graph search</option>
     </select>
-    <button class="button-style-rp" onclick="randomInitialState()">Random State</button>
+    
     <button class="button-style-rp" onclick="solvePuzzle()">Solve</button>
     <button id="b-show" class="button-style-rp" onclick="showCommandPanel()">Show Command Help</button>
-    <button class="button-style-rp" onclick="showState()">Show State</button>
-    <button class="button-style-rp" onclick="showIndexQueen()">show queen index</button>
+    <button id="b-position" class="button-style-rp" onclick="showPosition()">Show position queens search</button>
     <button class="button-style-rp" onclick="reloadPosition()">Reset</button>
     <br><br><input type="checkbox" id="red-pointer" name="redPointer" class="checkBox-size">
     <label for="red-pointer" class="checkBox-text">Does show point?</label><br>
