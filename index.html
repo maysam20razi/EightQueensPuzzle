@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ver 1.0.0.0 11-jul-2022 by maysam razi copyright -->
+<!-- ver 1.0.0.0  -->
 <html lang="en">
 <head>
     <title>Maysam Razi - Eight Queens Puzzle</title>
@@ -36,9 +36,10 @@
                     posCol = POS_Col[i];
                     posRow = (i % 2 == 0) ? POS_Row[2 * j + 1] : POS_Row[2 * j];
                     innerHtmlBoard = innerHtmlBoard + '<div class="boardPanelW ' + posCol + ' ' + posRow + '"></div>';
-                }
+               }
             document.getElementById('board').innerHTML = innerHtmlBoard;
         }
+
         function reloadPosition() {
             document.location.reload();
         }
@@ -49,13 +50,13 @@
         const functionList = [solveRows];
 
         function solvePuzzle() {
-            commandLine('Start puzzle solver');
+            commandLine('let solve puzzle');
             epoch = 0;
             for (var i = 0; i < 8; i++)
                 release(i);
             let first = Math.floor(Math.random() * 8);
             rowQueensIndex[0] = first;
-            fillSquare(first,0,0);
+            fillSquare(first,0);
             functionList[document.getElementById('algorithm').selectedIndex]();
 
         }
@@ -103,8 +104,7 @@
                 rowQueensIndex[i] = findIndex(i, Math.max(rowQueensIndex[i], 0));
                 if (rowQueensIndex[i] > -1)
                     {
-
-                      fillSquare(rowQueensIndex[i], i, i);
+                      fillSquare(rowQueensIndex[i], i);
                     }
                 else
                     {
@@ -115,7 +115,7 @@
             {
               graphSearchTrace(rowQueensIndex[0] + ' , '+rowQueensIndex[1] + ' , '+rowQueensIndex[2] + ' , '+rowQueensIndex[3] + ' , '+rowQueensIndex[4] + ' , '+rowQueensIndex[5] + ' , '+rowQueensIndex[6] + ' , '+rowQueensIndex[7]);
               nextGraphSearch();
-              const calcTimeout = setTimeout(solveRows, 500);
+              const calcTimeout = setTimeout(solveRows, 300);
             }
             else {
               graphSearchTrace(rowQueensIndex[0] + ' , '+rowQueensIndex[1] + ' , '+rowQueensIndex[2] + ' , '+rowQueensIndex[3] + ' , '+rowQueensIndex[4] + ' , '+rowQueensIndex[5] + ' , '+rowQueensIndex[6] + ' , '+rowQueensIndex[7]);
@@ -123,11 +123,19 @@
             }
 
         }
+        //second solver : hillClimbing
+        function hillClimbing(){
+          
+        }
+		//third solver : Genetic algorithm
+		function genetic(){
+		
+		}
         // ************** fill and release home function ****************
-        function fillSquare(indexRow, IndexCol, indexQueen) {
+        function fillSquare(indexRow, IndexCol) {
             commandLine('Fill square');
-            queens_8[indexQueen].rowQ = indexRow;
-            queens_8[indexQueen].columnQ = IndexCol;
+            queens_8[IndexCol].rowQ = indexRow;
+            queens_8[IndexCol].columnQ = IndexCol;
             queenActiveInBoard = queenActiveInBoard + 1;
             for (var i = 0; i < 8; i++) {
                 fullHomeIndex[indexRow][i] = true;
@@ -159,7 +167,7 @@
             for (var k = 0; k < 8; k++)
                 if (queens_8[k].rowQ != -1) {
                     queenActiveInBoard = queenActiveInBoard + 1;
-                    fillSquare(queens_8[k].rowQ, queens_8[k].columnQ, k);
+                    fillSquare(queens_8[k].rowQ, queens_8[k].columnQ);
                 }
         }
 
@@ -500,7 +508,7 @@
     <select id="algorithm" class="button-style-rp">
         <option>graph search</option>
     </select>
-    
+
     <button class="button-style-rp" onclick="solvePuzzle()">Solve</button>
     <button id="b-show" class="button-style-rp" onclick="showCommandPanel()">Show Command Help</button>
     <button id="b-position" class="button-style-rp" onclick="showPosition()">Show position queens search</button>
