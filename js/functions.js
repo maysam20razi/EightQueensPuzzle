@@ -3,6 +3,7 @@
 All Rights Reserved
 All of code are prototype no clean code or for bussiness model
 for self-study and fun!!
+this file deprecated beacuse coding is ditry and must review
 ==========================================
 */
 
