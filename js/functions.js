@@ -3,6 +3,8 @@
 All Rights Reserved
 All of code are prototype no clean code or for bussiness model
 for self-study and fun!!
+
+update in 29/9/2023 this file is reject beacuse this code is bad and dirty
 ==========================================
 */
 
@@ -465,7 +467,7 @@ function selectParentOH(populationGenerateOH,typeSelectionOH ){//default elitism
   switch (typeSelectionOH) {
     case 0 :
 		for(let i=0;i<5;i++)
-			childOH[i]= populationGenerateOH[ranksOH[i]];//best 0,1,2,3 =>4
+			childOH[i]= populationGenerateOH[ranksOH[i]];//best 0,1,2,3 => 4
 		for (let i=5;i<13;i++) {//5,6,7,8,9,10,11,12, 13,14,15,16,17,18,19,20 20-4 = 16
 			
 			childOH[i]= crossoverOH(populationGenerateOH[ranksOH[i-5]],populationGenerateOH[ranksOH[i-4]],i)[0];
