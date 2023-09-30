@@ -3,8 +3,6 @@
 All Rights Reserved
 All of code are prototype no clean code or for bussiness model
 for self-study and fun!!
-
-update in 29/9/2023 this file is reject beacuse this code is bad and dirty
 ==========================================
 */
 
